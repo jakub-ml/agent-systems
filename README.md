@@ -7,9 +7,8 @@ This project is a web-based epidemic simulation tool built with Flask, where use
 ## Overview
 The page provides an interface for setting up and running a world simulation, including options to adjust parameters related to the population, disease, and simulation speed. It also displays a visual map of the simulation and dynamic charts to track its progress over time.
 
-
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/29a0c765-4791-4834-920a-6fc08d27e573" alt="image">
+  <img src="https://github.com/user-attachments/assets/af6cecc3-6e4e-469b-9f0c-b00c021a2b7c" alt="image">
 </p>
 
 ### World Settings
