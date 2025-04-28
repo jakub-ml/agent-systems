@@ -1,10 +1,10 @@
 import random 
-a = random.sample(range(0, 101), 4)
-
-print(a)
+import numpy as np
 
 
+a=['day: 1, hour: 0', 'day: 1, hour: 1', 'day: 1, hour: 2', 'day: 1, hour: 3', 'day: 1, hour: 4', 'day: 1, hour: 5', 'day: 1, hour: 6', 'day: 1, hour: 7', 'day: 1, hour: 8', 'day: 1, hour: 9', 'day: 1, hour: 10', 'day: 1, hour: 11', 'day: 1, hour: 12', 'day: 1, hour: 13', 'day: 1, hour: 14', 'day: 1, hour: 15', 'day: 1, hour: 16', 'day: 1, hour: 17', 'day: 1, hour: 18', 'day: 1, hour: 19', 'day: 1, hour: 20', 'day: 1, hour: 21', 'day: 1, hour: 22', 'day: 1, hour: 23', 'day: 2, hour: 0', 'day: 2, hour: 1', 'day: 2, hour: 2', 'day: 2, hour: 3', 'day: 2, hour: 4', 'day: 2, hour: 5', 'day: 2, hour: 6', 'day: 2, hour: 7', 'day: 2, hour: 8', 'day: 2, hour: 9', 'day: 2, hour: 10', 'day: 2, hour: 11', 'day: 2, hour: 12', 'day: 2, hour: 13', 'day: 2, hour: 14', 'day: 2, hour: 15', 'day: 2, hour: 16', 'day: 2, hour: 17', 'day: 2, hour: 18', 'day: 2, hour: 19', 'day: 2, hour: 20', 'day: 2, hour: 21', 'day: 2, hour: 22', 'day: 2, hour: 23', 'day: 3, hour: 0', 'day: 3, hour: 1']
 
+print(a[a.index("day: 2, hour: 3"):])
 # import numpy as np
 # import matplotlib.pyplot as plt
 

@@ -6,6 +6,7 @@ import random
 
 class Agent():
     def __init__(self):
+        self.agent_id = None
         self.x = None
         self.y = None
         self.age = None
@@ -15,8 +16,8 @@ class Agent():
         self.work_id = None
         self.location = None
 
-    def make_move(self, agent, map, hour):
-        self.x, self.y = move(agent, map, hour)
+    def make_move(self, agent, map, hour, free_beds):
+        self.x, self.y = move(agent, map, hour, free_beds)
         self.location = map.get_location_from_cords(self.x, self.y)
 
     def get_age(self):

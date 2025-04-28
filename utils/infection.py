@@ -11,7 +11,6 @@ def agent_status(agent, map, location, n_sick, infectionChance, deathChance, rec
 
     # print(location)
     if agent.status == "healthy":
-        print(infectionChance / map.house_1.sum(), map.house_1.sum(), random.random())
         if n_sick == 1:
             if location=="house_1" and infectionChance / map.house_1.sum() > random.random():
                 agent.status = "sick"

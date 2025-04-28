@@ -25,7 +25,7 @@
       padding: 10px;
     }
 
-    #settingsSection {
+    #setSzngsSection {
       margin-bottom: 20px;
     }
 
@@ -129,6 +129,7 @@
     </div>
 
     <button id="startSimulation">Rozpocznij symulację</button>
+
     <div>
       <span id="kalendar"></span>
     </div>
@@ -136,8 +137,40 @@
     <div>
       <span id="clock"></span>
     </div>
+    <h3>Zbieraj dane symulacji</h3>
+    <div class="sliderContainer">
+    <label for="speedSlider">Szybkość symulacji: <span id="speedValue"></span>ms</label>
+    <input type="range" id="speedSlider" min="0" max="1000" step="5" value="100">  
+    
+    <div class="sliderContainer">
+      <label for="longSlider">Długość zapisu: <span id="long_save">ms</span></label>
+      <input type="range" id="longSlider" min="1" max="100" step="1" value="3">  
+    </div>
+
+    <label for="customInput">Zapisz jako:</label>
+    <input type="text" id="customInput" placeholder="Nazwa pliku...">
+
+    <h3>Optymalizuj rozwiązanie</h3>
+    <label for="customReduce">Funkcja kosztów:</label>
+    <input type="text" id="customReduce" placeholder="max healthy / min dead...">
+
+    <label for="tempSlider">Końcowa temperatura: <span id="temp"></span></label>
+    <input type="range" id="tempSlider" min="0.00001" max="0.01" step="0.00001" value="0.001">  
+
+    <h3>Odtwórz symulację</h3>
+    <label for="customOutput">Wczytaj:</label>
+    <input type="text" id="customOutput" placeholder="Nazwa pliku...">
+
+    <div class="sliderContainer">
+      <label for="playbackSpeedSlider">Szybkość odtwarzania: <span id="playbackSpeedValue"></span> ms</label>
+      <input type="range" id="playbackSpeedSlider" min="10" max="1000" step="10" value="100">
 
     </div>
+    <button id="loadScenario">Wczytaj scenariusz</button>
+
+
+  </div>
+</div>
 
 
   <!-- Mapa i wykres -->
@@ -154,6 +187,7 @@
 
   </div>
 </div>
+
 
 <!-- Podpięcie skryptu JavaScript -->
 <script src="script.js"></script>

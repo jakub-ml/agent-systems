@@ -62,7 +62,7 @@ class Map():
 
         # Work
         map_prob[50:65,60:90] = self.work_1
-        map_prob[80:95,60:90] = self.work_1
+        map_prob[80:95,60:90] = self.work_2
 
         # Shop
         map_prob[50:65,30:50] = self.shop

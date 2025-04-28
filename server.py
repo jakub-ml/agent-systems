@@ -7,6 +7,7 @@ import time
 from utils.agent import Agent
 from utils.map import Map
 from utils.infection import count_status_fun
+import json
 app = Flask(__name__)
 
 # Struktura do przechowywania danych symulacji
@@ -50,7 +51,14 @@ def start_simulation():
     simulation_data["recoverOutsideChance"] = float(data["recoverOutsideChance"])
     simulation_data["recoverHospitalChance"] = float(data["recoverHospitalChance"])
     simulation_data["initialSick"] = float(data["initialSick"])
-    
+    simulation_data["customInput"] = str(data["customInput"])
+    simulation_data["longSlider"] = int(data["longSlider"])
+    simulation_data["customReduce"] = data["customReduce"]
+    simulation_data["tempSlider"] = float(data["tempSlider"])
+    simulation_data["customOutput"] = str(data["customOutput"])
+
+    simulation_data['save_data'] = {}
+
 
     # Inicjalizacja agentów (losowe położenie w obszarze 1000x1000, wszyscy zdrowi)
     global population
@@ -58,10 +66,12 @@ def start_simulation():
     global map
     global next_day
     global count_status
+    global first_send
+    first_send = True
     count_status={}
     next_day=True
     sick_id = random.sample(range(0, int(simulation_data["population"])), int(simulation_data["initialSick"]))
-
+    curr_hospital_beds=0
     for i in range(simulation_data["population"]):
         map = Map(np.ones((100, 100)))
         population[i].get_age()
@@ -69,25 +79,26 @@ def start_simulation():
         population[i].get_schedule()        
         population[i].get_home_id()
         population[i].get_work_id()
-        population[i].make_move(population[i], map, 0)
+        population[i].agent_id = i
+        population[i].make_move(population[i], map, 0, simulation_data["hospitalBeds"] > curr_hospital_beds)
         if i in sick_id:
             population[i].status='sick'
-            # population[i].location="house_3"#map.get_location_from_cords(population[i].x, population[i].y)
-            # count_status[population[i].location] = {"healthy": 0, "sick": 1, "dead": 0}
-
-            # population[i].location = map.get_location_from_cords(population[i].x, population[i].y)
-            # count_status = count_status_fun(population[i].location, population[i].status, count_status)
-            # population[i].get_status(population[i], map, count_status, simulation_data["infectionChance"], simulation_data["deathChance"], simulation_data["recoverOutsideChance"], simulation_data["recoverHospitalChance"])
-
-            # population[i].get_status(population[i], map, {}, simulation_data["infectionChance"], simulation_data["deathChance"], simulation_data["recoverOutsideChance"], simulation_data["recoverHospitalChance"])
     simulation_data["agents"] = []
     for i in range(simulation_data["population"]):
 
         simulation_data["agents"].append({
+            "agent_id": population[i].agent_id,
             "x": population[i].x+5,
             "y": population[i].y+5,
-            "status": "healthy"
+            "age": population[i].age,
+            "home_id": population[i].home_id,
+            "work_id": population[i].work_id,
+            "location": population[i].location,
+            "status": population[i].status,
+            "schedule": population[i].schedule[0]
         })
+    simulation_data['save_data'][f"day: {1}, hour: {0}"] = simulation_data["agents"]
+
 
     # Reset licznika czasu i statystyk
     simulation_data["tick"] = 0
@@ -103,9 +114,9 @@ def start_simulation():
 def get_data():
     if "population" in globals():
         # Przykładowa bardzo uproszczona logika symulacji (możesz ją rozbudować wg własnych potrzeb)
-        # simulation_data["tick"] += 1
         global count_status
         global next_day
+        curr_hospital_beds = 0
         if next_day == True:
             simulation_data["tick"] += 1
             next_day=False
@@ -120,45 +131,57 @@ def get_data():
         for i in range(simulation_data["population"]):
             map = Map(np.ones((100, 100)))
             if not next_day:
-                population[i].make_move(population[i], map, hour)
+                population[i].make_move(population[i], map, hour, simulation_data["hospitalBeds"]>curr_hospital_beds)
+                # limit for hospital bed
+                if population[i].location == "hospital":
+                    curr_hospital_beds+=1
+
             else:
                 count_status = count_status_fun(population[i].location, population[i].status, count_status)
                 population[i].get_status(population[i], map, count_status, simulation_data["infectionChance"], simulation_data["deathChance"], simulation_data["recoverOutsideChance"], simulation_data["recoverHospitalChance"])
-        
+
+                # count earning rate
                 if population[i].location in ["work_1", "work_2"] and population[i].age == "adult" and population[i].status!="dead":
                     simulation_data["earnings"] += simulation_data["income"]
 
+
             simulation_data["agents"].append({
+                "agent_id": population[i].agent_id,
                 "x": population[i].x+5,
                 "y": population[i].y+5,
-                "status": population[i].status
+                "age": population[i].age,
+                "home_id": population[i].home_id,
+                "work_id": population[i].work_id,
+                "location": population[i].location,
+                "status": population[i].status,
+                "schedule": population[i].schedule[hour]
             })
-
-
-        # Przykładowe losowe zarażanie i wyzdrowienia
-        # for agent in simulation_data["agents"]:
-        #     if agent["status"] == "healthy":
-        #         # Losowa szansa na zachorowanie (mocno zmniejszona przez '/ 10.0' - tylko przykład)
-        #         if random.random() < (simulation_data["infectionChance"] / 100.0 / 10.0):
-        #             agent["status"] = "sick"
-        #     elif agent["status"] == "sick":
-        #         # Losowa szansa na śmierć
-        #         if random.random() < (simulation_data["deathChance"] / 100.0 / 10.0):
-        #             agent["status"] = "dead"
-        #         # Albo losowa szansa na wyzdrowienie
-        #         elif random.random() < (simulation_data["recoverOutsideChance"] / 100.0 / 10.0):
-        #             agent["status"] = "healthy"
 
         # Przeliczenie statystyk (healthy, sick, dead)
         healthy_count = sum(1 for a in simulation_data["agents"] if a["status"] == "healthy")
         sick_count = sum(1 for a in simulation_data["agents"] if a["status"] == "sick")
         dead_count = sum(1 for a in simulation_data["agents"] if a["status"] == "dead")
-
+        
         simulation_data["healthy"] = healthy_count
         simulation_data["sick"] = sick_count
         simulation_data["dead"] = dead_count
         simulation_data["hour"] = hour
         simulation_data["day"] = day
+
+        simulation_data['save_data'][f"day: {day}, hour: {hour}"] = simulation_data["agents"]
+
+        if simulation_data["longSlider"]==day and hour == 0:
+            with open(f'simulated_annealing\data\{simulation_data["customInput"]}.json', 'w') as f:
+                json.dump(simulation_data['save_data'], f, indent=4)
+
+            with open(f'simulated_annealing\data\{simulation_data["customInput"]}_metadata.json', 'w') as f:
+                json.dump(simulation_data, f, indent=4)
+            
+            with open(f'simulated_annealing\data\{"temporary_file"}.txt', 'w', encoding='utf-8') as f:
+                f.write(simulation_data["customInput"])
+
+            import evolution_alg
+
         # Zwracamy dane w formacie JSON
         return jsonify({
             "agents": simulation_data["agents"],
@@ -170,6 +193,65 @@ def get_data():
             "hour": simulation_data["hour"],
             "day": simulation_data["day"]
         }), 200
+
+
+loaded_scenario = None
+scenario_keys = []
+current_index = 0
+
+@app.route("/load", methods=["POST"])
+def load_scenario():
+    global loaded_scenario, scenario_keys, current_index, earnings
+    earnings = 0
+
+    data = request.get_json()
+    custom_output = data.get("customOutput")
+
+    if not custom_output:
+        return jsonify({"error": "Brak nazwy pliku"}), 400
+
+    try:
+        with open(f'simulated_annealing/data/{custom_output}.json', 'r') as f:
+            loaded_scenario = json.load(f)
+
+        scenario_keys = list(loaded_scenario.keys())
+        current_index = 0
+
+        return jsonify({"status": "loaded", "totalSteps": len(scenario_keys)}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Nie udało się wczytać pliku"}), 500
+
+
+@app.route("/next", methods=["GET"])
+def get_next_step():
+    global loaded_scenario, scenario_keys, current_index, earnings
+
+    if loaded_scenario is None or current_index >= len(scenario_keys)-1:
+        return jsonify({"finished": True}), 200
+
+    key = scenario_keys[current_index]
+    agents_data = loaded_scenario[key]
+
+    healthy = sum(1 for agent in agents_data if agent["status"] == "healthy")
+    sick = sum(1 for agent in agents_data if agent["status"] == "sick")
+    dead = sum(1 for agent in agents_data if agent["status"] == "dead")
+    for agent in agents_data:
+        if agent.get("location") in ["work_1", "work_2"] and agent.get("age") == "adult" and agent.get("status") != "dead":
+            earnings += 100  # UWAGA: tutaj musisz dać ile wynosi "income" z symulacji
+
+    current_index += 1
+    print("AA")
+    if current_index!=1:
+        return jsonify({
+            "agents": agents_data,
+            "healthy": healthy,
+            "sick": sick,
+            "dead": dead,
+            "earnings": earnings,
+            "step": current_index-1
+        }), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
