@@ -93,29 +93,23 @@ function updateSliderValue(sliderId, valueId) {
         labels: [], // Tutaj można wstawiać np. numer iteracji (tick) lub czas
         datasets: [
           {
-            label: "Zdrowi",
+            label: "Healthy",
             data: [],
             borderColor: "green",
             fill: false
           },
           {
-            label: "Chorzy",
+            label: "Sick",
             data: [],
             borderColor: "red",
             fill: false
           },
           {
-            label: "Martwi",
+            label: "Dead",
             data: [],
             borderColor: "black",
             fill: false
           },
-          // {
-          //   label: "Zarobki",
-          //   data: [],
-          //   borderColor: "blue",
-          //   fill: false
-          // }
         ]
       },
       options: {
@@ -149,26 +143,8 @@ function updateSliderValue(sliderId, valueId) {
         data: {
           labels: [], // Tutaj można wstawiać np. numer iteracji (tick) lub czas
           datasets: [
-            // {
-            //   label: "Zdrowi",
-            //   data: [],
-            //   borderColor: "green",
-            //   fill: false
-            // },
-            // {
-            //   label: "Chorzy",
-            //   data: [],
-            //   borderColor: "red",
-            //   fill: false
-            // },
-            // {
-            //   label: "Martwi",
-            //   data: [],
-            //   borderColor: "black",
-            //   fill: false
-            // },
             {
-              label: "Zarobki",
+              label: "Earnings",
               data: [],
               borderColor: "blue",
               fill: false
