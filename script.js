@@ -1,6 +1,22 @@
-const bgImage = new Image();
-bgImage.src = "C:/Users/ADMIN/Desktop/Agent systems/python_java/background.jpg";
-let playbackSpeed = 100; // Domyślnie 100 ms
+const background = new Image();
+background.src = 'static/images/background1.png';
+
+const personSick = new Image();
+personSick.src = 'static/images/sick.png';
+const personHealthy = new Image();
+personHealthy.src = 'static/images/healthy.png';
+const personDead = new Image();
+personDead.src = 'static/images/dead.png';
+const schoolIcon = new Image();
+schoolIcon.src = 'static/images/school1.png';
+const hospitalIcon = new Image();
+hospitalIcon.src = 'static/images/hospital.png';
+const officeIcon = new Image();
+officeIcon.src = 'static/images/office2.jpg';
+const shopIcon = new Image();
+shopIcon.src = 'static/images/shop2.png';
+const houseIcon = new Image();
+houseIcon.src = 'static/images/home2.png';
 
 // Wyświetlanie aktualnych wartości suwaków obok etykiet
 function updateSliderValue(sliderId, valueId) {
@@ -34,9 +50,6 @@ function updateSliderValue(sliderId, valueId) {
     updateSliderValue("recoverOutsideChance", "recoverOutsideValue");
     updateSliderValue("recoverHospitalChance", "recoverHospitalValue");
     updateSliderValue("initialSick", "initialValue");
-    updateSliderValue("speedSlider", "speedValue");
-    updateSliderValue("longSlider", "long_save");
-    updateSliderValue("tempSlider", "temp");
     
     const sliders = [
       { sliderId: "population", valueId: "populationValue" },
@@ -46,11 +59,7 @@ function updateSliderValue(sliderId, valueId) {
       { sliderId: "deathChance", valueId: "deathChanceValue" },
       { sliderId: "recoverOutsideChance", valueId: "recoverOutsideValue" },
       { sliderId: "recoverHospitalChance", valueId: "recoverHospitalValue" },
-      { sliderId: "initialSick", valueId: "initialValue" },
-      { sliderId: "speedSlider", valueId: "speedValue" },
-      { sliderId: "longSlider", valueId: "long_save" },
-      { sliderId: "tempSlider", valueId: "temp" }
-
+      { sliderId: "initialSick", valueId: "initialValue" }
     ];
   
     sliders.forEach(obj => {
@@ -93,23 +102,29 @@ function updateSliderValue(sliderId, valueId) {
         labels: [], // Tutaj można wstawiać np. numer iteracji (tick) lub czas
         datasets: [
           {
-            label: "Healthy",
+            label: "Zdrowi",
             data: [],
             borderColor: "green",
             fill: false
           },
           {
-            label: "Sick",
+            label: "Chorzy",
             data: [],
             borderColor: "red",
             fill: false
           },
           {
-            label: "Dead",
+            label: "Martwi",
             data: [],
             borderColor: "black",
             fill: false
           },
+          // {
+          //   label: "Zarobki",
+          //   data: [],
+          //   borderColor: "blue",
+          //   fill: false
+          // }
         ]
       },
       options: {
@@ -143,8 +158,26 @@ function updateSliderValue(sliderId, valueId) {
         data: {
           labels: [], // Tutaj można wstawiać np. numer iteracji (tick) lub czas
           datasets: [
+            // {
+            //   label: "Zdrowi",
+            //   data: [],
+            //   borderColor: "green",
+            //   fill: false
+            // },
+            // {
+            //   label: "Chorzy",
+            //   data: [],
+            //   borderColor: "red",
+            //   fill: false
+            // },
+            // {
+            //   label: "Martwi",
+            //   data: [],
+            //   borderColor: "black",
+            //   fill: false
+            // },
             {
-              label: "Earnings",
+              label: "Zarobki",
               data: [],
               borderColor: "blue",
               fill: false
@@ -182,32 +215,58 @@ function updateSliderValue(sliderId, valueId) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
     // RYSUJEMY SIATKĘ (przed rysowaniem agentów)
-    drawGrid(ctx, canvas.width, canvas.height, 10);
-  
+    //drawGrid(ctx, canvas.width, canvas.height, 10);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+    ctx.globalAlpha = 0.65;
+    ctx.drawImage(schoolIcon, 3, 720, 300, 200);
+    ctx.drawImage(hospitalIcon, 3, 190, 170, 200);
+    ctx.drawImage(officeIcon, 650, 720, 300, 250);
+    ctx.drawImage(officeIcon, 650, 500, 300, 250);
+    ctx.drawImage(shopIcon, 250, 400, 250, 300);// i think it is better to change coordinates
+    ctx.drawImage(houseIcon, 3, 15, 150, 150);
+    ctx.drawImage(houseIcon, 155, 15, 150, 150);
+    ctx.drawImage(houseIcon, 310, 15, 150, 150);
+    ctx.drawImage(houseIcon, 465, 15, 150, 150);
+    ctx.drawImage(houseIcon, 615, 15, 150, 150);
+    ctx.drawImage(houseIcon, 765, 15, 150, 150);
+    ctx.globalAlpha = 1.0;
+
     // Rysowanie agentów...
     agents.forEach(agent => {
-      if (agent.status === "healthy") {
+      /*if (agent.status === "healthy") {
         ctx.fillStyle = "green";
         ctx.beginPath();
         ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
         ctx.fill();
+        ctx.drawImage(personHealthy, agent.x - 16, agent.y - 16, 20, 20);
       } else if (agent.status === "sick") {
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
-        ctx.fill();
+        ctx.drawImage(personSick, agent.x - 16, agent.y - 16, 20, 20);
       } else if (agent.status === "dead") {
-        ctx.strokeStyle = "black";
-        ctx.beginPath();
-        ctx.moveTo(agent.x - 2, agent.y - 2);
-        ctx.lineTo(agent.x + 2, agent.y + 2);
-        ctx.moveTo(agent.x + 2, agent.y - 2);
-        ctx.lineTo(agent.x - 2, agent.y + 2);
-        ctx.stroke();
+        ctx.drawImage(personDead, agent.x - 16, agent.y - 16, 20, 20);*/
+        if (agent.status === "healthy") {
+          ctx.fillStyle = "green";
+          ctx.beginPath();
+          ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
+          ctx.fill();
+        } else if (agent.status === "sick") {
+          ctx.fillStyle = "red";
+          ctx.beginPath();
+          ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
+          ctx.fill();
+        } else if (agent.status === "dead") {
+          ctx.strokeStyle = "black";
+          ctx.beginPath();
+          ctx.moveTo(agent.x - 2, agent.y - 2);
+          ctx.lineTo(agent.x + 2, agent.y + 2);
+          ctx.moveTo(agent.x + 2, agent.y - 2);
+          ctx.lineTo(agent.x - 2, agent.y + 2);
+          ctx.stroke();
       }
     });
   }
   
+
   
   // Funkcja wywoływana w interwale, aby pobierać aktualne dane z serwera
   let fetchCounter = 0;
@@ -238,15 +297,6 @@ function updateSliderValue(sliderId, valueId) {
     }
   }
   
-  let simulationInterval = null; 
-  function startSimulationLoop() {
-    if (simulationInterval) clearInterval(simulationInterval); // Kasuj stary interwał
-  
-    const speed = document.getElementById("speedSlider").value;
-    simulationInterval = setInterval(fetchSimulationData, speed);
-  }
-  
-
   // Funkcja, która rozpoczyna symulację po kliknięciu przycisku
   async function startSimulation() {
     // Pobierz wartości suwaków
@@ -258,12 +308,7 @@ function updateSliderValue(sliderId, valueId) {
     const recoverOutsideChance = document.getElementById("recoverOutsideChance").value;
     const recoverHospitalChance = document.getElementById("recoverHospitalChance").value;
     const initialSick = document.getElementById("initialSick").value;
-    const customInput = document.getElementById("customInput").value; 
-    const longSlider = document.getElementById("longSlider").value; 
-    const customReduce = document.getElementById("customReduce").value; 
-    const tempSlider = document.getElementById("tempSlider").value; 
-    const customOutput = document.getElementById("customOutput").value; 
-
+    
     // Wyślij dane do serwera
     try {
       const response = await fetch("/start", {
@@ -277,12 +322,7 @@ function updateSliderValue(sliderId, valueId) {
           deathChance,
           recoverOutsideChance,
           recoverHospitalChance,
-          initialSick,
-          customInput,
-          longSlider,
-          customReduce,
-          tempSlider,
-          customOutput
+          initialSick
         })
       });
       if (!response.ok) {
@@ -299,91 +339,16 @@ function updateSliderValue(sliderId, valueId) {
       statsChart2.update();
 
       // Uruchom pętlę (np. co 1 sekundę) do odświeżania danych symulacji
-      startSimulationLoop();
+      setInterval(fetchSimulationData, 100);
     } catch (err) {
       console.error("Błąd:", err);
     }
   }
-  
-let loadedScenario = null;
-let playbackInterval = null;
-let scenarioKeys = [];
-let currentScenarioIndex = 0;
-
-
-async function loadScenario() {
-  const customOutput = document.getElementById("customOutput").value;
-
-  if (!customOutput) {
-    alert("Podaj nazwę pliku!");
-    return;
-  }
-
-  try {
-    const response = await fetch("/load", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customOutput })
-    });
-
-    const data = await response.json();
-
-    if (data.status === "loaded") {
-      console.log("Plik wczytany, rozpoczynamy odtwarzanie...");
-      startPlayback(); // automatycznie startujemy odtwarzanie
-    } else {
-      console.error("Błąd ładowania pliku.");
-    }
-  } catch (err) {
-    console.error("Błąd:", err);
-  }
-}
-
-
-function startPlayback() {
-  if (playbackInterval) clearInterval(playbackInterval);
-
-  playbackInterval = setInterval(async () => {
-    try {
-      const response = await fetch("/next");
-      const data = await response.json();
-
-      if (data.finished) {
-        clearInterval(playbackInterval);
-        console.log("Odtwarzanie zakończone");
-        return;
-      }
-
-      const agents = data.agents.map(agent => ({
-        x: agent.x,
-        y: agent.y,
-        status: agent.status
-      }));
-
-      drawMap(agents);
-
-      updateChartData(data.healthy, data.sick, data.dead, data.earnings, data.step);
-      updateChartData2(data.healthy, data.sick, data.dead, data.earnings, data.step);
-      
-    } catch (error) {
-      console.error("Błąd podczas pobierania kroku symulacji:", error);
-    }
-  }, playbackSpeed);
-}
-
   
   window.addEventListener("DOMContentLoaded", () => {
     initSliders();
     initChart();
     initChart2();
     document.getElementById("startSimulation").addEventListener("click", startSimulation);
-    document.getElementById("playbackSpeedSlider").addEventListener("input", () => {
-      playbackSpeed = parseInt(document.getElementById("playbackSpeedSlider").value);
-      document.getElementById("playbackSpeedValue").textContent = playbackSpeed;
-
-      if (playbackInterval) {        startPlayback();      }    });
-    
-    document.getElementById("loadScenario").addEventListener("click", loadScenario);
-
   });
   

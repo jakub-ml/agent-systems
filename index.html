@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>World Simulation</title>
+  <title>Symulacja świata</title>
   <!-- Wczytanie Chart.js do rysowania wykresów -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -25,7 +25,7 @@
       padding: 10px;
     }
 
-    #setSzngsSection {
+    #settingsSection {
       margin-bottom: 20px;
     }
 
@@ -79,57 +79,56 @@
   <div id="leftPanel">
     <!-- Sekcja ustawień świata -->
     <div id="settingsSection">
-      <h3>World Settings</h3>
+      <h3>Ustawienia świata</h3>
 
       <div class="sliderContainer">
-        <label for="population">Initial Population: <span id="populationValue"></span></label>
+        <label for="population">Początkowa liczba mieszkańców: <span id="populationValue"></span></label>
         <input type="range" id="population" min="1" max="1000" value="100" />
       </div>
 
       <div class="sliderContainer">
-        <label for="hospitalBeds">Hospital Beds: <span id="hospitalBedsValue"></span></label>
+        <label for="hospitalBeds">Liczba miejsc w szpitalu: <span id="hospitalBedsValue"></span></label>
         <input type="range" id="hospitalBeds" min="0" max="500" value="50" />
       </div>
 
       <div class="sliderContainer">
-        <label for="income">Income (per hour): <span id="incomeValue"></span></label>
+        <label for="income">Zarobki generowane (na godzinę): <span id="incomeValue"></span></label>
         <input type="range" id="income" min="0" max="1000" value="100" />
       </div>
     </div>
 
     <!-- Sekcja ustawień choroby -->
     <div id="settingsSection">
-      <h3>Disease Settings</h3>
+      <h3>Ustawienia choroby</h3>
 
       <div class="sliderContainer">
-        <label for="recoverOutsideChance">Recovery Chance (%): <span id="recoverOutsideValue"></span></label>
-        <input type="range" id="recoverOutsideChance" min="0" max="100" value="5" />
-      </div>
-
-      <div class="sliderContainer">
-        <label for="recoverHospitalChance">Recovery Chance in Hospital (%): <span id="recoverHospitalValue"></span></label>
-        <input type="range" id="recoverHospitalChance" min="0" max="100" value="10" />
-      </div>
-
-      <div class="sliderContainer">
-        <label for="infectionChance">Infection Chance (%): <span id="infectionChanceValue"></span></label>
+        <label for="infectionChance">Szansa na zarażenie (%): <span id="infectionChanceValue"></span></label>
         <input type="range" id="infectionChance" min="0" max="100" value="40" />
       </div>
 
       <div class="sliderContainer">
-        <label for="deathChance">Death Chance (%): <span id="deathChanceValue"></span></label>
+        <label for="deathChance">Szansa na śmierć (%): <span id="deathChanceValue"></span></label>
         <input type="range" id="deathChance" min="0" max="100" value="5" />
       </div>
 
       <div class="sliderContainer">
-        <label for="initialSick">Initial Sick Individuals: <span id="initialValue"></span></label>
+        <label for="recoverOutsideChance">Szansa wyzdrowienia poza szpitalem (%): <span id="recoverOutsideValue"></span></label>
+        <input type="range" id="recoverOutsideChance" min="0" max="100" value="5" />
+      </div>
+
+      <div class="sliderContainer">
+        <label for="recoverHospitalChance">Szansa wyzdrowienia w szpitalu (%): <span id="recoverHospitalValue"></span></label>
+        <input type="range" id="recoverHospitalChance" min="0" max="100" value="10" />
+      </div>
+
+      <div class="sliderContainer">
+        <label for="initialSick">Początkowa liczba chorych: <span id="initialValue"></span></label>
         <input type="range" id="initialSick" min="0" max="100" value="2" />
       </div>
 
     </div>
 
-    <button id="startSimulation">Start Simulation</button>
-
+    <button id="startSimulation">Rozpocznij symulację</button>
     <div>
       <span id="kalendar"></span>
     </div>
@@ -137,39 +136,8 @@
     <div>
       <span id="clock"></span>
     </div>
-    <h3>Collect Simulation Data</h3>
-    <div class="sliderContainer">
-    <label for="speedSlider">Simulation Speed: <span id="speedValue"></span> ms</label>
-    <input type="range" id="speedSlider" min="0" max="1000" step="5" value="100">  
-    
-    <div class="sliderContainer">
-      <label for="longSlider">Saving Length (days): <span id="long_save"></span> ms</label>
-      <input type="range" id="longSlider" min="1" max="100" step="1" value="3">  
-    </div>
-
-    <label for="customInput">Save As:</label>
-    <input type="text" id="customInput" placeholder="File name...">
-
-    <h3>Optimize the Solution</h3>
-    <label for="customReduce">Cost Function:</label>
-    <input type="text" id="customReduce" placeholder="max healthy / min dead...">
-
-    <label for="tempSlider">Final Temperature: <span id="temp"></span></label>
-    <input type="range" id="tempSlider" min="0.00001" max="0.01" step="0.00001" value="0.001">  
-
-    <h3>Replay Simulation</h3>
-    <label for="customOutput">Load:</label>
-    <input type="text" id="customOutput" placeholder="File name...">
-
-    <div class="sliderContainer">
-      <label for="playbackSpeedSlider">Playback Speed: <span id="playbackSpeedValue"></span> ms</label>
-      <input type="range" id="playbackSpeedSlider" min="10" max="1000" step="10" value="100">
 
     </div>
-    <button id="loadScenario">Load Scenario</button>
-
-  </div>
-</div>
 
 
   <!-- Mapa i wykres -->
@@ -186,7 +154,6 @@
 
   </div>
 </div>
-
 
 <!-- Podpięcie skryptu JavaScript -->
 <script src="script.js"></script>
