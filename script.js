@@ -1,3 +1,23 @@
+const background = new Image();
+background.src = 'static/images/background1.png';
+
+const personSick = new Image();
+personSick.src = 'static/images/sick.png';
+const personHealthy = new Image();
+personHealthy.src = 'static/images/healthy.png';
+const personDead = new Image();
+personDead.src = 'static/images/dead.png';
+const schoolIcon = new Image();
+schoolIcon.src = 'static/images/school1.png';
+const hospitalIcon = new Image();
+hospitalIcon.src = 'static/images/hospital.png';
+const officeIcon = new Image();
+officeIcon.src = 'static/images/office2.jpg';
+const shopIcon = new Image();
+shopIcon.src = 'static/images/shop2.png';
+const houseIcon = new Image();
+houseIcon.src = 'static/images/home2.png';
+
 const bgImage = new Image();
 bgImage.src = "C:/Users/ADMIN/Desktop/Agent systems/python_java/background.jpg";
 let playbackSpeed = 100; // Domyślnie 100 ms
@@ -182,28 +202,53 @@ function updateSliderValue(sliderId, valueId) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
     // RYSUJEMY SIATKĘ (przed rysowaniem agentów)
-    drawGrid(ctx, canvas.width, canvas.height, 10);
-  
+    //drawGrid(ctx, canvas.width, canvas.height, 10);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+    ctx.globalAlpha = 0.65;
+    ctx.drawImage(schoolIcon, 3, 720, 300, 200);
+    ctx.drawImage(hospitalIcon, 3, 190, 170, 200);
+    ctx.drawImage(officeIcon, 650, 720, 300, 250);
+    ctx.drawImage(officeIcon, 650, 500, 300, 250);
+    ctx.drawImage(shopIcon, 250, 400, 250, 300);// i think it is better to change coordinates
+    ctx.drawImage(houseIcon, 3, 15, 150, 150);
+    ctx.drawImage(houseIcon, 155, 15, 150, 150);
+    ctx.drawImage(houseIcon, 310, 15, 150, 150);
+    ctx.drawImage(houseIcon, 465, 15, 150, 150);
+    ctx.drawImage(houseIcon, 615, 15, 150, 150);
+    ctx.drawImage(houseIcon, 765, 15, 150, 150);
+    ctx.globalAlpha = 1.0;
+
     // Rysowanie agentów...
     agents.forEach(agent => {
-      if (agent.status === "healthy") {
+      /*if (agent.status === "healthy") {
         ctx.fillStyle = "green";
         ctx.beginPath();
         ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
         ctx.fill();
+        ctx.drawImage(personHealthy, agent.x - 16, agent.y - 16, 20, 20);
       } else if (agent.status === "sick") {
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
-        ctx.fill();
+        ctx.drawImage(personSick, agent.x - 16, agent.y - 16, 20, 20);
       } else if (agent.status === "dead") {
-        ctx.strokeStyle = "black";
-        ctx.beginPath();
-        ctx.moveTo(agent.x - 2, agent.y - 2);
-        ctx.lineTo(agent.x + 2, agent.y + 2);
-        ctx.moveTo(agent.x + 2, agent.y - 2);
-        ctx.lineTo(agent.x - 2, agent.y + 2);
-        ctx.stroke();
+        ctx.drawImage(personDead, agent.x - 16, agent.y - 16, 20, 20);*/
+        if (agent.status === "healthy") {
+          ctx.fillStyle = "green";
+          ctx.beginPath();
+          ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
+          ctx.fill();
+        } else if (agent.status === "sick") {
+          ctx.fillStyle = "red";
+          ctx.beginPath();
+          ctx.arc(agent.x, agent.y, 5, 0, 5 * Math.PI);
+          ctx.fill();
+        } else if (agent.status === "dead") {
+          ctx.strokeStyle = "black";
+          ctx.beginPath();
+          ctx.moveTo(agent.x - 2, agent.y - 2);
+          ctx.lineTo(agent.x + 2, agent.y + 2);
+          ctx.moveTo(agent.x + 2, agent.y - 2);
+          ctx.lineTo(agent.x - 2, agent.y + 2);
+          ctx.stroke();
       }
     });
   }
