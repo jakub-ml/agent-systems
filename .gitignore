@@ -1,6 +1,3 @@
 test.py
-data/
+data/asdfg.json
 /env
-simulated_annealing/**/*.json
-simulated_annealing/data/*
-!simulated_annealing/data/temporary_file.txt
