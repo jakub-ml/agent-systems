@@ -191,13 +191,13 @@ def simulated_annealing(data, end_temp=simulation_data["tempSlider"], start_temp
         if reduce in ['max healthy', 'max income']:
             if cost < new_cost or random.random() < temp:
                 cost, data = new_cost, new_data
-            print(cost, temp)
+                print(f"Cost: {cost}, Temp: {temp}")
             temp=temp/2
 
         elif reduce in ['min sick', 'min dead']:
             if cost > new_cost or random.random() < temp:
                 cost, data = new_cost, new_data
-            print(cost, temp)
+                print(f"Cost: {cost}, Temp: {temp}")
             temp=temp/2
                 
         if temp<end_temp:
